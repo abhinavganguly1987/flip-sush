@@ -1,34 +1,33 @@
 package com.toto.sush;
 
-import android.app.Notification;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
-import android.media.AudioManager;
 import android.os.Bundle;
-import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Switch;
+
+import static com.toto.sush.SushIntentService.NOTIFICATION_EX;
+
+/**
+ * Created by abhinavganguly on 12/05/2017.
+ */
 
 public class SushMainActivity extends AppCompatActivity {
 
 
     private String LOG_TAG="[TOTO] SushMainActivity";
 
+    //SushResponseReceiver is used to receive broadcasted notifications from  intent service SushIntentService
+    private SushResponseReceiver receiver;
 
     IntentFilter filter;
     private Intent sushIntent;
-    private SushResponseReceiver receiver;
+
     private boolean mIsSushResponseReceiverRegistered=false;
 
     @Override
@@ -44,11 +43,10 @@ public class SushMainActivity extends AppCompatActivity {
         filter.addCategory(Intent.CATEGORY_DEFAULT);
         receiver = new SushResponseReceiver();
         registerReceiver(receiver, filter);
+        mIsSushResponseReceiverRegistered=true;
 
 
         sushIntent = new Intent(this,SushIntentService.class);
-
-
 
     }
 
@@ -90,7 +88,7 @@ public class SushMainActivity extends AppCompatActivity {
 
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        notificationManager.cancel(911);
+        notificationManager.cancel(NOTIFICATION_EX);
         notificationManager.cancelAll();
 
         super.onDestroy();
@@ -113,7 +111,8 @@ public class SushMainActivity extends AppCompatActivity {
         @Override
         public void onBackPressed(){
 
-            Log.i(LOG_TAG, " In onBackPressed... ");moveTaskToBack(true);
+            Log.i(LOG_TAG, " In onBackPressed... ");
+            moveTaskToBack(true);
         }
 
 

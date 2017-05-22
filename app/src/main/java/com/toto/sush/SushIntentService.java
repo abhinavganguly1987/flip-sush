@@ -30,7 +30,7 @@ public class SushIntentService extends IntentService implements SensorEventListe
 
     //for trayicon notification
     private NotificationManager sushNotificationManager;
-    private static final int NOTIFICATION_EX = 911;
+    public static final int NOTIFICATION_EX = 911;
 
 
     public static final String PARAM_IN_ISCHECKED="IN_ISCHECKED";
@@ -45,60 +45,6 @@ public class SushIntentService extends IntentService implements SensorEventListe
     }
 
     @Override
-    public void onSensorChanged(SensorEvent event) {
-
-//        Log.i(LOG_TAG," In onSensorChanged ");
-
-        if (mIsSensorUpdateEnabled) {
-
-            float deltaZ = event.values[2];
-
-//            Log.i(LOG_TAG, "Sensors fired....");
-//            Log.i(LOG_TAG, "Z = " + deltaZ);
-
-
-            AudioManager am = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
-
-            TelephonyManager tm = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
-
-            if(tm.getCallState()==TelephonyManager.CALL_STATE_RINGING){
-
-                if (deltaZ < 0) {
-
-                    if(am.getRingerMode()==AudioManager.RINGER_MODE_NORMAL){
-                        am.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
-                    }
-
-                }else {
-                    if(am.getRingerMode()==AudioManager.RINGER_MODE_VIBRATE){
-                        am.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
-                    }
-                }
-
-            }
-
-        } else {
-
-            sensorManager.unregisterListener(this);
-        }
-
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-    }
-
-    @Override
-    public void onTaskRemoved(Intent rootIntent) {
-        Log.i(LOG_TAG," In onTaskRemoved ");
-        stopNotificationIconDisplay();
-        stopSelf();
-//        super.onTaskRemoved(rootIntent);
-    }
-
-
-    @Override
     protected void onHandleIntent(@Nullable Intent intent) {
         Log.i(LOG_TAG," In onHandleIntent ");
         //working on sensor
@@ -106,20 +52,15 @@ public class SushIntentService extends IntentService implements SensorEventListe
 
         if (sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null) {
             // success! we have an accelerometer
-            Log.i(LOG_TAG," Ahaa ! accelerometer found...");
+            Log.i(LOG_TAG," Ahaa ! an accelerometer found...");
             accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
             //  will start it on toggle switch
             //sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
-            //not using it
-            //vibrateThreshold = accelerometer.getMaximumRange() / 2;
         } else {
 
             Log.i(LOG_TAG," Aww Snap ! no accelerometer found...");
         }
-
-
-
 
         //working on notification
 
@@ -159,6 +100,63 @@ public class SushIntentService extends IntentService implements SensorEventListe
 
 
     }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+
+//        Log.i(LOG_TAG," In onSensorChanged ");
+
+        if (mIsSensorUpdateEnabled) {
+
+            float deltaZ = event.values[2];
+
+//            Log.i(LOG_TAG, "Sensors fired....");
+//            Log.i(LOG_TAG, "Z = " + deltaZ);
+
+            AudioManager am = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+
+            TelephonyManager tm = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+
+            if(tm.getCallState()==TelephonyManager.CALL_STATE_RINGING){
+
+                if (deltaZ < 0) {
+
+                    if(am.getRingerMode()==AudioManager.RINGER_MODE_NORMAL){
+                        am.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
+                    }
+
+                }else {
+                    if(am.getRingerMode()==AudioManager.RINGER_MODE_VIBRATE){
+                        am.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+                    }
+                }
+
+            }
+
+        } else {
+
+            sensorManager.unregisterListener(this);
+        }
+
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
+
+    //This method is not behaving as expected, so need to investigate on this in future,
+    //however it is not blocking the functionality
+    @Override
+    public void onTaskRemoved(Intent rootIntent) {
+        Log.i(LOG_TAG," In onTaskRemoved ");
+        stopNotificationIconDisplay();
+        stopSelf();
+//        super.onTaskRemoved(rootIntent);
+    }
+
+
+
 
 
     private void startNotificationIconDisplay(){
