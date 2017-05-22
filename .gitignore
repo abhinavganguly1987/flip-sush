@@ -1,4 +1,6 @@
-<<<<<<< HEAD
+
+
+
 *.iml
 .gradle
 /local.properties
@@ -31,4 +33,4 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
->>>>>>> a6f08b9e098cad80a09ec39fd4f3043bab004dbf
+
