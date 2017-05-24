@@ -8,11 +8,13 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:logo="@mipmap/ic_launcher">
 
 
         <activity android:name=".SushMainActivity"
-            android:launchMode="singleTop"
+            android:launchMode="singleTask"
+            android:clearTaskOnLaunch="true"
             android:configChanges="orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,8 +23,7 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".SushIntentService"   android:exported="false"
-            />
+        <service android:name=".SushIntentService"  android:stopWithTask="true"/>
     </application>
 
 </manifest>

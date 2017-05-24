@@ -110,8 +110,7 @@ public class SushIntentService extends IntentService implements SensorEventListe
 
             float deltaZ = event.values[2];
 
-//            Log.i(LOG_TAG, "Sensors fired....");
-//            Log.i(LOG_TAG, "Z = " + deltaZ);
+            Log.i(LOG_TAG, "Sensors fired....Z ="+ deltaZ);
 
             AudioManager am = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
 
@@ -134,12 +133,17 @@ public class SushIntentService extends IntentService implements SensorEventListe
             }
 
         } else {
-
+            Log.i(LOG_TAG, "Sensors Just STOPPED firing....");
             sensorManager.unregisterListener(this);
         }
 
     }
 
+    /**
+     * This is just a method needs to be overridden nothing much is happening here
+     * @param sensor
+     * @param accuracy
+     */
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
@@ -176,18 +180,13 @@ public class SushIntentService extends IntentService implements SensorEventListe
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.trayicon)
+                        .setSmallIcon(getNotificationIcon())
                         .setContentTitle("Sush!")
-                        .setContentText("Sush is running(In Intent)..")
+                        .setContentText("Sush is running...")
                         .setContentIntent(pIntent)
                         .setOngoing(true);
 
         Notification notificationCompat = mBuilder.build();
-//        notificationCompat.flags =  Notification.FLAG_ONGOING_EVENT;
-
-
-//        sushNotificationManager =
-//                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
         sushNotificationManager.notify(NOTIFICATION_EX, notificationCompat);
 
@@ -199,6 +198,11 @@ public class SushIntentService extends IntentService implements SensorEventListe
         Log.i(LOG_TAG," In stopNotificationIconDisplay() ");
 
         sushNotificationManager.cancel(NOTIFICATION_EX);
+    }
+
+    private int getNotificationIcon() {
+        boolean useWhiteIcon = (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP);
+        return useWhiteIcon ?  R.drawable.check_box_black_24dp: R.drawable.trayicon ;
     }
 
 }
