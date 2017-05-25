@@ -33,6 +33,7 @@
 
 # VCS files
 .idea/vcs.xml
+.idea/misc.xml
 
 # Ignore Yourself
 *.gitignore

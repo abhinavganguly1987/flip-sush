@@ -11,9 +11,7 @@ import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.KeyboardShortcutGroup;
 import android.view.Menu;
-import android.view.View;
 import android.widget.CompoundButton;
-import android.widget.Switch;
 
 import java.util.List;
 
@@ -32,7 +30,7 @@ public class SushMainActivity extends AppCompatActivity  implements
     //SushResponseReceiver is used to receive broadcasted notifications from  intent service SushIntentService
     private SushResponseReceiver receiver;
 
-    IntentFilter filter;
+    private IntentFilter filter;
     private Intent sushIntent;
 
     private boolean mIsSushResponseReceiverRegistered=false;
@@ -153,7 +151,6 @@ public class SushMainActivity extends AppCompatActivity  implements
                 SwitchCompat susSwitch = (SwitchCompat)findViewById(R.id.toggleSush);
                 Bundle b = intent.getExtras();
                 boolean isChecked = (boolean)b.get(SushIntentService.PARAM_OUT_ISCHECKED);
-        //        Boolean.parseBoolean(intent.getStringExtra(SushIntentService.PARAM_OUT_ISCHECKED));
                 Log.i("SushResponseReceiver", "in onReceive:: isChecked "+isChecked);
                 susSwitch.setChecked(isChecked);
 

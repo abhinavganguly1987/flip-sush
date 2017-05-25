@@ -146,6 +146,7 @@ public class SushIntentService extends IntentService implements SensorEventListe
      */
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        //Do Nothing
 
     }
 
