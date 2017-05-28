@@ -15,6 +15,7 @@ import android.widget.CompoundButton;
 
 import java.util.List;
 
+import static com.toto.sush.LogSwitch.LOG_INFO;
 import static com.toto.sush.SushIntentService.NOTIFICATION_EX;
 
 /**
@@ -39,7 +40,7 @@ public class SushMainActivity extends AppCompatActivity  implements
     protected void onCreate(Bundle savedInstanceState) {
 
 
-        Log.i(LOG_TAG," In onCreate ");
+        if(LOG_INFO) Log.i(LOG_TAG," In onCreate ");
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sush_main);
@@ -79,14 +80,14 @@ public class SushMainActivity extends AppCompatActivity  implements
 
 
     protected  void onResume(){
-        Log.i(LOG_TAG, " In onResume... ");
+        if(LOG_INFO) Log.i(LOG_TAG, " In onResume... ");
         super.onResume();
 
         if(!mIsSushResponseReceiverRegistered ){
 
             if(null==receiver)
                 receiver = new SushResponseReceiver();
-                Log.i(LOG_TAG, " In onResume... registering BROADCAST RECEIVER since it was null");
+            if(LOG_INFO) Log.i(LOG_TAG, " In onResume... registering BROADCAST RECEIVER since it was null");
 
 
             filter = new IntentFilter(SushResponseReceiver.ACTION_RESP);
@@ -100,7 +101,7 @@ public class SushMainActivity extends AppCompatActivity  implements
 
     @Override
     protected void onDestroy() {
-        Log.i(LOG_TAG, " In onDestroy... ");
+        if(LOG_INFO) Log.i(LOG_TAG, " In onDestroy... ");
 
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
@@ -111,11 +112,13 @@ public class SushMainActivity extends AppCompatActivity  implements
     }
 
     protected void onPause(){
-        Log.i(LOG_TAG, " In onPause... ");
+        if(LOG_INFO) Log.i(LOG_TAG, " In onPause... ");
         super.onPause();
 
         if(mIsSushResponseReceiverRegistered ){
-            Log.i(LOG_TAG, " In onPause... a registered receiver found ... thus unregistering it");
+
+            if(LOG_INFO) Log.i(LOG_TAG, " In onPause... a registered receiver found ... thus unregistering it");
+
             unregisterReceiver(receiver);
             receiver=null;
             mIsSushResponseReceiverRegistered=false;
@@ -132,7 +135,7 @@ public class SushMainActivity extends AppCompatActivity  implements
     @Override
         public void onBackPressed(){
 
-            Log.i(LOG_TAG, " In onBackPressed... ");
+        if(LOG_INFO) Log.i(LOG_TAG, " In onBackPressed... ");
             moveTaskToBack(true);
         }
 
@@ -147,11 +150,14 @@ public class SushMainActivity extends AppCompatActivity  implements
             public void onReceive(Context context, Intent intent) {
 
 
-                Log.i("SushResponseReceiver", "in onReceive");
+                if(LOG_INFO) Log.i("SushResponseReceiver", "in onReceive");
+
                 SwitchCompat susSwitch = (SwitchCompat)findViewById(R.id.toggleSush);
                 Bundle b = intent.getExtras();
                 boolean isChecked = (boolean)b.get(SushIntentService.PARAM_OUT_ISCHECKED);
-                Log.i("SushResponseReceiver", "in onReceive:: isChecked "+isChecked);
+
+                if(LOG_INFO) Log.i("SushResponseReceiver", "in onReceive:: isChecked "+isChecked);
+
                 susSwitch.setChecked(isChecked);
 
             }

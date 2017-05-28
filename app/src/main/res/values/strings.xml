@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Sush</string>
+    <string name="notification_caption">Sush is running...</string>
+    <string name="Switch_ON">ON</string>
+    <string name="Switch_OFF">OFF</string>
 </resources>

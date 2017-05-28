@@ -17,6 +17,9 @@
 
         <!-- inactive track color (30% transparency) -->
         <item name="android:colorForeground">@color/grey</item>
+
+        <item name="android:scaleX">2</item>
+        <item name="android:scaleY">2</item>
     </style>
 
 </resources>

@@ -17,6 +17,9 @@ import android.support.v4.app.NotificationCompat;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
+import static com.toto.sush.LogSwitch.LOG_ERROR;
+import static com.toto.sush.LogSwitch.LOG_INFO;
+
 /**
  * Created by abhinavganguly on 12/05/2017.
  */
@@ -46,20 +49,22 @@ public class SushIntentService extends IntentService implements SensorEventListe
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-        Log.i(LOG_TAG," In onHandleIntent ");
+
+        if(LOG_INFO) Log.i(LOG_TAG," In onHandleIntent ");
         //working on sensor
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 
         if (sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null) {
             // success! we have an accelerometer
-            Log.i(LOG_TAG," Ahaa ! an accelerometer found...");
+            if(LOG_INFO)  Log.i(LOG_TAG," Ahaa ! an accelerometer found...");
+
             accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
             //  will start it on toggle switch
             //sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
         } else {
 
-            Log.i(LOG_TAG," Aww Snap ! no accelerometer found...");
+            if(LOG_ERROR)  Log.e(LOG_TAG," Aww Snap ! no accelerometer found...");
         }
 
         //working on notification
@@ -71,12 +76,12 @@ public class SushIntentService extends IntentService implements SensorEventListe
         Bundle b = intent.getExtras();
 //        boolean isChecked = Boolean.parseBoolean(intent.getStringExtra(PARAM_IN_ISCHECKED));
 
-        Log.i(LOG_TAG," In onHandleIntent, Bundle : "+b);
+        if(LOG_INFO) Log.i(LOG_TAG," In onHandleIntent, Bundle : "+b);
         if(null !=b){
 
             boolean isChecked = (boolean)b.get(PARAM_IN_ISCHECKED);
 
-            Log.i(LOG_TAG," In onHandleIntent, isChecked : "+isChecked);
+            if(LOG_INFO)  Log.i(LOG_TAG," In onHandleIntent, isChecked : "+isChecked);
 
             if(isChecked){
                 mIsSensorUpdateEnabled = true;
@@ -104,13 +109,11 @@ public class SushIntentService extends IntentService implements SensorEventListe
     @Override
     public void onSensorChanged(SensorEvent event) {
 
-//        Log.i(LOG_TAG," In onSensorChanged ");
-
         if (mIsSensorUpdateEnabled) {
 
             float deltaZ = event.values[2];
 
-            Log.i(LOG_TAG, "Sensors fired....Z ="+ deltaZ);
+            if(LOG_INFO)  Log.i(LOG_TAG, "Sensors fired....Z ="+ deltaZ);
 
             AudioManager am = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
 
@@ -133,7 +136,7 @@ public class SushIntentService extends IntentService implements SensorEventListe
             }
 
         } else {
-            Log.i(LOG_TAG, "Sensors Just STOPPED firing....");
+            if(LOG_INFO) Log.i(LOG_TAG, "Sensors Just STOPPED firing....");
             sensorManager.unregisterListener(this);
         }
 
@@ -154,7 +157,9 @@ public class SushIntentService extends IntentService implements SensorEventListe
     //however it is not blocking the functionality
     @Override
     public void onTaskRemoved(Intent rootIntent) {
-        Log.i(LOG_TAG," In onTaskRemoved ");
+
+        if(LOG_INFO) Log.i(LOG_TAG," In onTaskRemoved ");
+
         stopNotificationIconDisplay();
         stopSelf();
 //        super.onTaskRemoved(rootIntent);
@@ -166,11 +171,10 @@ public class SushIntentService extends IntentService implements SensorEventListe
 
     private void startNotificationIconDisplay(){
 
-        Log.i(LOG_TAG," In startNotificationIconDisplay ");
+        if(LOG_INFO)  Log.i(LOG_TAG," In startNotificationIconDisplay ");
 
 
         Intent intentNotify = new Intent(this, SushMainActivity.class);
-//        intentNotify.setAction(Long.toString(System.currentTimeMillis()));
         intentNotify.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
 
@@ -182,8 +186,8 @@ public class SushIntentService extends IntentService implements SensorEventListe
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(getNotificationIcon())
-                        .setContentTitle("Sush!")
-                        .setContentText("Sush is running...")
+                        .setContentTitle(getString(R.string.app_name))
+                        .setContentText(getString(R.string.notification_caption))
                         .setContentIntent(pIntent)
                         .setOngoing(true);
 
@@ -196,7 +200,7 @@ public class SushIntentService extends IntentService implements SensorEventListe
 
     private void stopNotificationIconDisplay(){
 
-        Log.i(LOG_TAG," In stopNotificationIconDisplay() ");
+        if(LOG_INFO)   Log.i(LOG_TAG," In stopNotificationIconDisplay() ");
 
         sushNotificationManager.cancel(NOTIFICATION_EX);
     }
