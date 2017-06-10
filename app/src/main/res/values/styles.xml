@@ -8,4 +8,18 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="susSwitch" parent="Theme.AppCompat.Light">
+        <!-- active thumb & track color (30% transparency) -->
+        <item name="colorControlActivated">@color/green</item>
+
+        <!-- inactive thumb color -->
+        <item name="colorSwitchThumbNormal">@color/red</item>
+
+        <!-- inactive track color (30% transparency) -->
+        <item name="android:colorForeground">@color/grey</item>
+
+        <item name="android:scaleX">2</item>
+        <item name="android:scaleY">2</item>
+    </style>
+
 </resources>

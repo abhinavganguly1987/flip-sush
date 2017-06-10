@@ -7,17 +7,23 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
-import android.view.View;
-import android.widget.Switch;
+import android.view.KeyboardShortcutGroup;
+import android.view.Menu;
+import android.widget.CompoundButton;
 
+import java.util.List;
+
+import static com.toto.sush.LogSwitch.LOG_INFO;
 import static com.toto.sush.SushIntentService.NOTIFICATION_EX;
 
 /**
  * Created by abhinavganguly on 12/05/2017.
  */
 
-public class SushMainActivity extends AppCompatActivity {
+public class SushMainActivity extends AppCompatActivity  implements
+        SwitchCompat.OnCheckedChangeListener{
 
 
     private String LOG_TAG="[TOTO] SushMainActivity";
@@ -25,7 +31,7 @@ public class SushMainActivity extends AppCompatActivity {
     //SushResponseReceiver is used to receive broadcasted notifications from  intent service SushIntentService
     private SushResponseReceiver receiver;
 
-    IntentFilter filter;
+    private IntentFilter filter;
     private Intent sushIntent;
 
     private boolean mIsSushResponseReceiverRegistered=false;
@@ -34,10 +40,16 @@ public class SushMainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
 
-        Log.i(LOG_TAG," In onCreate ");
+        if(LOG_INFO) Log.i(LOG_TAG," In onCreate ");
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sush_main);
+
+        SwitchCompat switchCompat = (SwitchCompat) findViewById(R.id
+                .toggleSush);
+        switchCompat.setSwitchPadding(40);
+        switchCompat.setOnCheckedChangeListener(this);
+
 
         filter = new IntentFilter(SushResponseReceiver.ACTION_RESP);
         filter.addCategory(Intent.CATEGORY_DEFAULT);
@@ -51,26 +63,31 @@ public class SushMainActivity extends AppCompatActivity {
     }
 
 
-    public void startSensing(View switchView) {
-        boolean isChecked = ((Switch) switchView).isChecked();
-        Log.i(LOG_TAG, "startSensing FIRED");
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-        sushIntent.putExtra(SushIntentService.PARAM_IN_ISCHECKED,isChecked);
-        startService(sushIntent);
+        switch (buttonView.getId()) {
+            case R.id.toggleSush:
+                sushIntent.putExtra(SushIntentService.PARAM_IN_ISCHECKED,isChecked);
+                startService(sushIntent);
+                break;
+            default:
+                break;
+        }
 
     }
 
 
 
     protected  void onResume(){
-        Log.i(LOG_TAG, " In onResume... ");
+        if(LOG_INFO) Log.i(LOG_TAG, " In onResume... ");
         super.onResume();
 
         if(!mIsSushResponseReceiverRegistered ){
 
             if(null==receiver)
                 receiver = new SushResponseReceiver();
-                Log.i(LOG_TAG, " In onResume... registering BROADCAST RECEIVER since it was null");
+            if(LOG_INFO) Log.i(LOG_TAG, " In onResume... registering BROADCAST RECEIVER since it was null");
 
 
             filter = new IntentFilter(SushResponseReceiver.ACTION_RESP);
@@ -84,7 +101,7 @@ public class SushMainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        Log.i(LOG_TAG, " In onDestroy... ");
+        if(LOG_INFO) Log.i(LOG_TAG, " In onDestroy... ");
 
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
@@ -95,11 +112,13 @@ public class SushMainActivity extends AppCompatActivity {
     }
 
     protected void onPause(){
-        Log.i(LOG_TAG, " In onPause... ");
+        if(LOG_INFO) Log.i(LOG_TAG, " In onPause... ");
         super.onPause();
 
         if(mIsSushResponseReceiverRegistered ){
-            Log.i(LOG_TAG, " In onPause... a registered receiver found ... thus unregistering it");
+
+            if(LOG_INFO) Log.i(LOG_TAG, " In onPause... a registered receiver found ... thus unregistering it");
+
             unregisterReceiver(receiver);
             receiver=null;
             mIsSushResponseReceiverRegistered=false;
@@ -108,10 +127,15 @@ public class SushMainActivity extends AppCompatActivity {
 
     }
 
-        @Override
+    @Override
+    public void onProvideKeyboardShortcuts(List<KeyboardShortcutGroup> data, Menu menu, int deviceId) {
+        super.onProvideKeyboardShortcuts(data, menu, deviceId);
+    }
+
+    @Override
         public void onBackPressed(){
 
-            Log.i(LOG_TAG, " In onBackPressed... ");
+        if(LOG_INFO) Log.i(LOG_TAG, " In onBackPressed... ");
             moveTaskToBack(true);
         }
 
@@ -126,12 +150,14 @@ public class SushMainActivity extends AppCompatActivity {
             public void onReceive(Context context, Intent intent) {
 
 
-                Log.i("SushResponseReceiver", "in onReceive");
-                Switch susSwitch = (Switch)findViewById(R.id.toggleSush);
+                if(LOG_INFO) Log.i("SushResponseReceiver", "in onReceive");
+
+                SwitchCompat susSwitch = (SwitchCompat)findViewById(R.id.toggleSush);
                 Bundle b = intent.getExtras();
                 boolean isChecked = (boolean)b.get(SushIntentService.PARAM_OUT_ISCHECKED);
-        //        Boolean.parseBoolean(intent.getStringExtra(SushIntentService.PARAM_OUT_ISCHECKED));
-                Log.i("SushResponseReceiver", "in onReceive:: isChecked "+isChecked);
+
+                if(LOG_INFO) Log.i("SushResponseReceiver", "in onReceive:: isChecked "+isChecked);
+
                 susSwitch.setChecked(isChecked);
 
             }

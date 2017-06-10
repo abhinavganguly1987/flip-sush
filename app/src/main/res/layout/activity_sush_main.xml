@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_sush_main"
     android:layout_width="match_parent"
@@ -11,32 +12,16 @@
     tools:context="com.toto.sush.SushMainActivity"
     android:soundEffectsEnabled="true">
 
-    <Switch
+    <android.support.v7.widget.SwitchCompat
         android:id="@+id/toggleSush"
-        android:layout_width="170dip"
-        android:layout_height="80dp"
-        android:layout_centerInParent="false"
-        android:maxHeight="90dp"
-        android:minHeight="136dp"
-        android:minWidth="200dp"
-        android:onClick="startSensing"
-        android:scaleX="2"
-        android:scaleY="2"
-        android:showText="true"
-        android:splitTrack="true"
-        android:switchMinWidth="56dp"
-        android:switchTextAppearance="@style/TextAppearance.AppCompat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
         android:textAlignment="center"
-        android:textAllCaps="false"
-        android:textOff="OFF"
-        android:textOn="ON"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        tools:minHeight="125dp"
-        android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginRight="219dp"
-        android:layout_marginEnd="219dp" />
-
+        android:textOn="@string/Switch_ON"
+        android:textOff="@string/Switch_OFF"
+        android:textSize="8sp"
+        android:theme="@style/susSwitch"
+        app:showText="true"
+        app:switchMinWidth="65dp" />
 </RelativeLayout>
