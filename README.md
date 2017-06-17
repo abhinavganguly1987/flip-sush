@@ -27,3 +27,5 @@ How to use this app:
 
 
 Thank you Nitin Prabhu for your code review and feedback.
+Sat 17th June 2017 : New update is coming soon...
+:)
