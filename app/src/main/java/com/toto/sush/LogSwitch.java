@@ -6,7 +6,7 @@ package com.toto.sush;
 
 public class LogSwitch {
 
-    private static int LOG_LEVEL = 1;
+    private static int LOG_LEVEL = 4;
 
     public static boolean LOG_INFO = LOG_LEVEL>3;
     public static boolean LOG_WARN = LOG_LEVEL>2;

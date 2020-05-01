@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".SushIntentService"  android:stopWithTask="true"/>
+        <service android:name=".SushIntentService"  android:exported="false"/>
     </application>
 
 </manifest>

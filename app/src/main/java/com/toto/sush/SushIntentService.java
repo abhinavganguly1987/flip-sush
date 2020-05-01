@@ -2,15 +2,18 @@ package com.toto.sush;
 
 import android.app.IntentService;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
@@ -26,6 +29,8 @@ import static com.toto.sush.LogSwitch.LOG_INFO;
 
 public class SushIntentService extends IntentService implements SensorEventListener{
 
+    private static final String SUSH_CHANNEL_ID = "com.toto.sush.NOTIFICATIONCHANNEL";
+    private static final CharSequence SUSH_CHANNEL_NAME = "SUSH NOTIFICATION CHANNEL" ;
     //For sensor
     private SensorManager sensorManager;
     private Sensor accelerometer;
@@ -45,6 +50,27 @@ public class SushIntentService extends IntentService implements SensorEventListe
 
     public SushIntentService() {
         super("SushIntentService");
+    }
+
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if(LOG_INFO) Log.i(LOG_TAG," In createNotificationChannel ");
+
+//            CharSequence name = getString(R.string.channel_name);
+//            String description = getString(R.string.channel_description);
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel channel = new NotificationChannel(SUSH_CHANNEL_ID, SUSH_CHANNEL_NAME, importance);
+            channel.setDescription("SUSH NOTIFICATION CHANNEL DESC");
+            channel.enableLights(true);
+            channel.setLightColor(Color.GREEN);
+            channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            sushNotificationManager = getSystemService(NotificationManager.class);
+            sushNotificationManager.createNotificationChannel(channel);
+        }
     }
 
     @Override
@@ -69,9 +95,9 @@ public class SushIntentService extends IntentService implements SensorEventListe
 
         //working on notification
 
-        sushNotificationManager =
-                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
+        createNotificationChannel();
+//        sushNotificationManager =
+//                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
         Bundle b = intent.getExtras();
 //        boolean isChecked = Boolean.parseBoolean(intent.getStringExtra(PARAM_IN_ISCHECKED));
@@ -117,7 +143,10 @@ public class SushIntentService extends IntentService implements SensorEventListe
 
             AudioManager am = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
 
+            if(LOG_INFO)  Log.i(LOG_TAG, "Audio Manager ringerMode....  ="+ am.getRingerMode());
+
             TelephonyManager tm = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+            if(LOG_INFO)  Log.i(LOG_TAG, "Telephony Manager = "+ tm.getCallState());
 
             if(tm.getCallState()==TelephonyManager.CALL_STATE_RINGING){
 
@@ -184,16 +213,14 @@ public class SushIntentService extends IntentService implements SensorEventListe
 
 
         NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(this)
+                new NotificationCompat.Builder(this,SUSH_CHANNEL_ID)
                         .setSmallIcon(getNotificationIcon())
                         .setContentTitle(getString(R.string.app_name))
                         .setContentText(getString(R.string.notification_caption))
                         .setContentIntent(pIntent)
                         .setOngoing(true);
 
-        Notification notificationCompat = mBuilder.build();
-
-        sushNotificationManager.notify(NOTIFICATION_EX, notificationCompat);
+        sushNotificationManager.notify(NOTIFICATION_EX, mBuilder.build());
 
 
     }
