@@ -3,4 +3,13 @@
     <string name="notification_caption">Sush is running...</string>
     <string name="Switch_ON">ON</string>
     <string name="Switch_OFF">OFF</string>
+    <string name="set_auto_sms">Set quick response SMS</string>
+    <string name="about">About Sush</string>
+    <string name="navigatio_drawer_open">Open navigation drawer</string>
+    <string name="navigatio_drawer_close">Close navigation drawer</string>
+    <string name="share">Share this app</string>
+    <string name="switch_state">switch_state</string>
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>
