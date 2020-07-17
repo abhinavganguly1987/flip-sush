@@ -11,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -24,11 +25,12 @@ import android.view.MenuItem;
 import android.widget.CompoundButton;
 import android.widget.Toast;
 
+import com.toto.sush.fragment.QuickResponseDialogFragment;
 import com.toto.sush.service.IncomingCallService;
 
 import static com.toto.sush.LogSwitch.LOG_INFO;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, QuickResponseDialogFragment.QuickResponseDialogListener {
 
     private String LOG_TAG = "^^^[TOTO] MainActivity";
 
@@ -38,7 +40,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private SwitchCompat switchCompat;
 
     private Handler handler = new Handler();
-
+    SharedPreferences sharedPref;
+    SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,8 +49,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_sush_draw_main);
 
         //Preferences to save the switch state
-        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
-        final SharedPreferences.Editor editor = sharedPref.edit();
+        sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        editor = sharedPref.edit();
 
 
         if (LOG_INFO) Log.i(LOG_TAG, " In onCreate ");
@@ -148,6 +151,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         if (!switchCompat.isChecked()) {
             if (LOG_INFO) Log.i(LOG_TAG, " In onBackPressed... Destroying since switch wasn't on");
+
             this.finish();
         } else {
             if (LOG_INFO) Log.i(LOG_TAG, " In onBackPressed...Moving task to back switch is on");
@@ -170,12 +174,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
-        switch (menuItem.getItemId()){
+        switch (menuItem.getItemId()) {
             case R.id.auto_sms:
-//                getSupportFragmentManager()
-//                        .beginTransaction()
-//                        .replace(R.id.fragment_container, new QuickSMSFragment())
-//                        .commit();
+                sushDrawerLayout.closeDrawer(GravityCompat.START);
+                showQuickResponseDialog();
                 break;
             case R.id.about:
                 Toast.makeText(getApplicationContext(), R.string.share, Toast.LENGTH_SHORT).show();
@@ -183,6 +185,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         sushDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void showQuickResponseDialog() {
+        int preselectedQuickSMSIndex = sharedPref.getInt("quickSMSIndex", -1);
+
+//        if (LOG_INFO)
+            Log.i(LOG_TAG, " in showQuickResponseDialog, quickSMSIndex in sharedPrefs is " + preselectedQuickSMSIndex);
+
+        FragmentManager fm = getSupportFragmentManager();
+        QuickResponseDialogFragment quickResponseDialogFragment = QuickResponseDialogFragment.newInstance(preselectedQuickSMSIndex);
+        quickResponseDialogFragment.show(fm, "quick_response_dialog_fragment");
+
+    }
+
+    @Override
+    public void onDialogPositiveClick(int selectedListIndex) {
+        Log.i(LOG_TAG, " in onDialogPositiveClick, quickSMSIndex in sharedPrefs is " + selectedListIndex);
+
+        editor.putInt("quickSMSIndex", selectedListIndex);
+        editor.apply();
     }
 
     //Inner runnable class to run the IncomingCallService on a separate thread
@@ -198,7 +220,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         @Override
         public void run() {
             startForegroundService(incomingCallIntent);
-            Log.i(LOG_TAG, "SushRunnable started");
+            if (LOG_INFO) Log.i(LOG_TAG, "SushRunnable started");
         }
 
 

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="quickSMSList">
+        <item>"None"</item>
+        <item>"Hey, im busy at the moment, can i call you later?"</item>
+        <item>"Hello, i am driving, i'll call you later alligator"</item>
+        <item>"In a meeting, i'll call you later"</item>
+        <item>"Hey honey, can i call you later?"</item>
+    </string-array>
+</resources>
