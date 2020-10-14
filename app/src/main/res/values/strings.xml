@@ -4,14 +4,45 @@
     <string name="Switch_ON">ON</string>
     <string name="Switch_OFF">OFF</string>
     <string name="set_auto_sms">Set quick response SMS</string>
+
     <string name="about">About Sush</string>
+    <string name="about_paragraph">
+        <![CDATA[
+        <b>Sush</b> is a tiny utility app, which allows you to \'flip your phone and put it into vibrate\' <br><br>
+        It essentially helps you to quickly turn your phone face-down and put it into vibrate. For instance, you are in a meeting, having lunch peacefully, studying at a library, attending a prayer at a temple, mosque or church, where a sudden phone call might startle you.
+        <br><br>
+        With this app you can have phone on ringer all the time, but at the same time, allows you the freedom to put it to vibrate upon an incoming call that you didn\'t intend to receive at that moment. This feature might be already available on some of the phones,
+        but most of them allows only to mute to silent by flipping. And also there are some in which this feature is not at all available.
+        <br><br>
+        <font color=\"blue\"><b><u>Whats new !</u></b> </font><br>
+        Now, with <b><font color=\"green\">version 2</font></b> you can set a quick response SMS, which will be sent  upon flipping the phone to vibrate to the caller, whose call you cannot receive at the moment.
+        <br><br>
+        Don\'t forget to share, rate and review this app! <br>
+        <b>Flip it .. Sush it..</b>
+    ]]>
+    </string>
+
     <string name="navigatio_drawer_open">Open navigation drawer</string>
     <string name="navigatio_drawer_close">Close navigation drawer</string>
-    <string name="share">Share this app</string>
+
     <string name="switch_state">switch_state</string>
-<!-- TODO: Remove or change this placeholder text -->
+    <string name="share">Share this app</string>
+    <string name="playstore_url">https://play.google.com/store/apps/details?id=</string>
+    <string name="share_extra_subject">Sush - A flip to silent app</string>
+    <string name="share_extra_text">Hey try this awesome utility app - Sush.\nIt is a tiny \'flip to silent\' app \t</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="set">Set</string>
     <string name="cancel">Cancel</string>
+    <string name="quick_SMS_index">quickSMSIndex</string>
+
+    <string name="sms_call_access_required">Send SMS and Call Log access is required for Quick Response SMS feature to work.</string>
+    <string name="ok">OK</string>
+    <string name="sms_call_access_permission_not_available">Send SMS and Call Log permissions are not available. Requesting their permissions.</string>
+    <string name="sms_call_access_permission_available">Send SMS and Call Log permissions are available.</string>
+    <string name="sms_call_access_permission_granted">Send SMS and Call Log permissions are granted.</string>
+    <string name="sms_call_access_permission_denied">Send SMS and Call Log permissions were denied.</string>
+    <string name="rate">Rate Sush</string>
 
 </resources>

@@ -9,5 +9,13 @@
         android:icon="@drawable/ic_baseline_share_24"
         android:title="@string/share"
         android:tooltipText="@string/share"
+        android:onClick="onShareAction"
         app:showAsAction="always"/>
+    <item
+        android:id="@+id/rate_app"
+        android:icon="@drawable/ic_baseline_star_24"
+        android:title="@string/rate"
+        android:tooltipText="@string/rate"
+        android:onClick="onRateThisAppAction"
+        app:showAsAction="ifRoom|withText"/>
 </menu>

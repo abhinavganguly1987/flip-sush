@@ -22,12 +22,20 @@
             android:elevation="4dp"
             app:fontFamily="cursive"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:navigationContentDescription="Sush app toolbar"
             app:navigationIcon="@drawable/baseline_menu_black_36"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:title="Sushii"
-            app:titleTextAppearance="@style/TextAppearance.AppCompat.Display1"
-            app:titleTextColor="@color/primary_text" />
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/bank_gothic"
+                android:paddingTop="8dp"
+                android:text="Sush..."
+                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                android:textColor="@color/primary_text"
+                android:textSize="36sp"
+                android:textStyle="bold" />
+        </android.support.v7.widget.Toolbar>
 
         <FrameLayout
             android:id="@+id/fragment_container"

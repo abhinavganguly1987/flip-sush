@@ -1,9 +1,11 @@
 package com.toto.sush;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,6 +13,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -22,17 +26,21 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import com.toto.sush.fragment.QuickResponseDialogFragment;
 import com.toto.sush.service.IncomingCallService;
 
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static com.toto.sush.LogSwitch.LOG_INFO;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, QuickResponseDialogFragment.QuickResponseDialogListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
+        QuickResponseDialogFragment.QuickResponseDialogListener, ActivityCompat.OnRequestPermissionsResultCallback {
 
     private String LOG_TAG = "^^^[TOTO] MainActivity";
+    public static String SUSH_PREFS = "sushPrefs";
 
     private DrawerLayout sushDrawerLayout;
 
@@ -49,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_sush_draw_main);
 
         //Preferences to save the switch state
-        sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        sharedPref = this.getSharedPreferences(SUSH_PREFS, Context.MODE_PRIVATE);
         editor = sharedPref.edit();
 
 
@@ -73,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             //creating the toolbar
             Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbarSush);
             setSupportActionBar(myToolbar);
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
 
             sushDrawerLayout = findViewById(R.id.activity_sush_draw_main);
             NavigationView navigationView = findViewById(R.id.nav_view);
@@ -96,21 +105,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             switchCompat.setSwitchPadding(40);
             //check if previously any switch state was set
             switchCompat.setChecked(sharedPref.getBoolean(getString(R.string.switch_state), false));
-            switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            switchCompat.setOnCheckedChangeListener((compoundButton, b) -> {
 
-                @RequiresApi(api = Build.VERSION_CODES.O)
-                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                editor.putBoolean(getString(R.string.switch_state), compoundButton.isChecked());
+                editor.apply();
+                SushRunnable sushRunnable = new SushRunnable(incomingCallIntent);
 
-                    editor.putBoolean(getString(R.string.switch_state), compoundButton.isChecked());
-                    editor.apply();
-                    SushRunnable sushRunnable = new SushRunnable(incomingCallIntent);
-
-                    if (compoundButton.isChecked()) {
-                        handler.post(sushRunnable);
-                    } else {
-                        stopService(incomingCallIntent);
-                        handler.removeCallbacksAndMessages(sushRunnable);
-                    }
+                if (compoundButton.isChecked()) {
+                    handler.post(sushRunnable);
+                } else {
+                    stopService(incomingCallIntent);
+                    handler.removeCallbacksAndMessages(sushRunnable);
                 }
             });
 
@@ -163,6 +168,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.action_bar_menu, menu);
+
         return true;
     }
 
@@ -177,21 +183,77 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (menuItem.getItemId()) {
             case R.id.auto_sms:
                 sushDrawerLayout.closeDrawer(GravityCompat.START);
-                showQuickResponseDialog();
+                checkForPermissionsForQuickResponseFeature();
                 break;
             case R.id.about:
-                Toast.makeText(getApplicationContext(), R.string.share, Toast.LENGTH_SHORT).show();
+                Intent aboutIntent = new Intent(this, AboutSushActivity.class);
+                startActivity(aboutIntent);
                 break;
         }
         sushDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 
-    private void showQuickResponseDialog() {
-        int preselectedQuickSMSIndex = sharedPref.getInt("quickSMSIndex", -1);
+    private void checkForPermissionsForQuickResponseFeature() {
 
-//        if (LOG_INFO)
-            Log.i(LOG_TAG, " in showQuickResponseDialog, quickSMSIndex in sharedPrefs is " + preselectedQuickSMSIndex);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CALL_LOG) != PERMISSION_GRANTED) {
+//            && ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PERMISSION_GRANTED) {
+
+            requestForPermissions();
+        } else {
+            showQuickResponseDialog();
+
+        }
+    }
+
+    private void requestForPermissions() {
+
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.SEND_SMS) &&
+                ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_CALL_LOG)) {
+
+            Snackbar.make(sushDrawerLayout, R.string.sms_call_access_required,
+                    Snackbar.LENGTH_INDEFINITE).setAction(R.string.ok, new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // Request the permission
+                    ActivityCompat.requestPermissions(MainActivity.this,
+                            new String[]{Manifest.permission.SEND_SMS, Manifest.permission.READ_CALL_LOG},
+                            1);
+
+                }
+            }).show();
+
+        } else {
+            Snackbar.make(sushDrawerLayout, R.string.sms_call_access_permission_not_available, Snackbar.LENGTH_SHORT).show();
+            // Request the permission. The result will be received in onRequestPermissionResult().
+            ActivityCompat.requestPermissions(MainActivity.this,
+                    new String[]{Manifest.permission.SEND_SMS, Manifest.permission.READ_CALL_LOG},
+                    1);
+        }
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        if (requestCode == 1) {
+            if (grantResults.length == 2 && grantResults[0] == PERMISSION_GRANTED && grantResults[1] == PERMISSION_GRANTED) {
+
+                Snackbar.make(sushDrawerLayout, R.string.sms_call_access_permission_granted, Snackbar.LENGTH_LONG).show();
+                showQuickResponseDialog();
+            } else {
+                Snackbar.make(sushDrawerLayout, R.string.sms_call_access_permission_denied, Snackbar.LENGTH_LONG).show();
+
+            }
+        }
+    }
+
+
+    private void showQuickResponseDialog() {
+        int preselectedQuickSMSIndex = sharedPref.getInt(getString(R.string.quick_SMS_index), -1);
+
+        if (LOG_INFO)   Log.i(LOG_TAG, " in showQuickResponseDialog, quickSMSIndex in sharedPrefs is " + preselectedQuickSMSIndex);
 
         FragmentManager fm = getSupportFragmentManager();
         QuickResponseDialogFragment quickResponseDialogFragment = QuickResponseDialogFragment.newInstance(preselectedQuickSMSIndex);
@@ -201,10 +263,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onDialogPositiveClick(int selectedListIndex) {
-        Log.i(LOG_TAG, " in onDialogPositiveClick, quickSMSIndex in sharedPrefs is " + selectedListIndex);
+        if (LOG_INFO)  Log.i(LOG_TAG, " in onDialogPositiveClick, quickSMSIndex in sharedPrefs is " + selectedListIndex);
 
-        editor.putInt("quickSMSIndex", selectedListIndex);
-        editor.apply();
+        editor.putInt(getString(R.string.quick_SMS_index), selectedListIndex);
+        editor.commit();
+    }
+
+    public void onShareAction(MenuItem item) {
+        Intent appShareIntent = new Intent(Intent.ACTION_SEND);
+        String appLink = getString(R.string.playstore_url) + getPackageName();
+        appShareIntent.setType("text/plain");
+        appShareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_extra_subject));
+        appShareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_extra_text) + appLink);
+        startActivity(Intent.createChooser(appShareIntent, "Share via..."));
+    }
+
+    public void onRateThisAppAction(MenuItem item){
+        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + getPackageName())));
+
     }
 
     //Inner runnable class to run the IncomingCallService on a separate thread

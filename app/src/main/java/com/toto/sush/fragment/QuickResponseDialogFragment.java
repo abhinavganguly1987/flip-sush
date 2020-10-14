@@ -9,11 +9,10 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.toto.sush.R;
+
+import static com.toto.sush.LogSwitch.LOG_INFO;
 
 public class QuickResponseDialogFragment extends DialogFragment {
 
@@ -41,12 +40,6 @@ public class QuickResponseDialogFragment extends DialogFragment {
         QuickResponseDialogFragment quickResponseDialogFragment = new QuickResponseDialogFragment();
         return quickResponseDialogFragment;
     }
-
-//    @Nullable
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-//        return inflater.inflate(R.layout.quick_response_dialog_fragment, container);
-//    }
 
 
     // Override the Fragment.onAttach() method to instantiate the NoticeDialogListener
@@ -76,14 +69,14 @@ public class QuickResponseDialogFragment extends DialogFragment {
                 .setSingleChoiceItems(R.array.quickSMSList, preselectedIndex, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Log.i(LOG_TAG, " in QuickResponseDialogFragment.on Selecting An Item, new selected Index is " + i);
+                        if (LOG_INFO) Log.i(LOG_TAG, " in QuickResponseDialogFragment.on Selecting An Item, new selected Index is " + i);
 
                         preselectedIndex = i;
                     }
                 })
                 .setPositiveButton(R.string.set, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        Log.i(LOG_TAG, " in QuickResponseDialogFragment. on selecting SET button, new selected Index is " + preselectedIndex);
+                        if (LOG_INFO) Log.i(LOG_TAG, " in QuickResponseDialogFragment. on selecting SET button, new selected Index is " + preselectedIndex);
 
                         dialog.dismiss();
                         listener.onDialogPositiveClick(preselectedIndex);
@@ -91,7 +84,7 @@ public class QuickResponseDialogFragment extends DialogFragment {
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        Log.i(LOG_TAG, " in QuickResponseDialogFragment. on selecting CANCEL button, existing selected Index is " + preselectedIndex);
+                        if (LOG_INFO) Log.i(LOG_TAG, " in QuickResponseDialogFragment. on selecting CANCEL button, existing selected Index is " + preselectedIndex);
 
                         dialog.cancel();
                     }

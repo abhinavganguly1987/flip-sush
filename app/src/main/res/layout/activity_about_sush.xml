@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_gravity="center"
+    tools:context=".AboutSushActivity">
+
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/aboutSushToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/primary_dark"
+        android:elevation="4dp"
+        app:fontFamily="cursive"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Dark">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/bank_gothic"
+            android:paddingTop="8dp"
+            android:text="About Sush"
+            android:textColor="@color/primary_text"
+            android:textSize="36sp"
+            android:textStyle="bold"/>
+    </android.support.v7.widget.Toolbar>
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="353dp"
+        android:layout_height="566dp"
+        android:layout_marginStart="26dp"
+        android:layout_marginTop="16dp"
+        android:contentDescription="@string/about"
+        android:fontFamily="sans-serif-light"
+        android:scrollbars="vertical"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:textColor="@color/primary_text"
+        android:textSize="18sp"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</LinearLayout>

@@ -8,20 +8,19 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
+import android.telephony.PhoneStateListener;
+import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.Toast;
@@ -31,6 +30,8 @@ import com.toto.sush.R;
 
 import static com.toto.sush.LogSwitch.LOG_ERROR;
 import static com.toto.sush.LogSwitch.LOG_INFO;
+import static com.toto.sush.MainActivity.SUSH_PREFS;
+
 /**
  * Created by abhinavganguly on 09/07/2020.
  */
@@ -46,6 +47,13 @@ public class IncomingCallService extends Service implements SensorEventListener 
     private SensorManager sensorManager;
     private Sensor accelerometer;
 
+    //for sending Quick SMS
+    private SharedPreferences sharedPref;
+    private String[] quickSMSarray;
+    private TelephonyManager telephonyManager;
+    private MyPhoneStateListener phoneStateListener;
+    boolean isSMSsent = false;
+
 
     @Override
     public void onCreate() {
@@ -54,6 +62,9 @@ public class IncomingCallService extends Service implements SensorEventListener 
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
+        telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -61,18 +72,16 @@ public class IncomingCallService extends Service implements SensorEventListener 
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         if (LOG_INFO) Log.e(LOG_TAG, "In onStartCommand");
-
+        sharedPref = this.getSharedPreferences(SUSH_PREFS, Context.MODE_PRIVATE);
+        quickSMSarray = getResources().getStringArray(R.array.quickSMSList);
         Toast.makeText(this, "Sush service starting", Toast.LENGTH_SHORT).show();
-
-        Bundle b = new Bundle();
-        AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        b.putInt("RINGER_MODE", am.getRingerMode());
-
-        TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-        b.putInt("CALL_STATE", tm.getCallState());
 
         mIsSensorUpdateEnabled = true;
         sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+
+        phoneStateListener = new MyPhoneStateListener();
+        telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
+
         createNotification();
 
         return START_STICKY;
@@ -85,11 +94,10 @@ public class IncomingCallService extends Service implements SensorEventListener 
     }
 
     public void onDestroy() {
-        if (LOG_INFO) Log.e(LOG_TAG, "In onDestroy");
+        if (LOG_INFO) Log.i(LOG_TAG, "In onDestroy");
 
         mIsSensorUpdateEnabled = false;
         sensorManager.unregisterListener(this);
-
         Toast.makeText(this, "Sush service done", Toast.LENGTH_SHORT).show();
         stopForeground(true);
     }
@@ -98,24 +106,24 @@ public class IncomingCallService extends Service implements SensorEventListener 
     @Override
     public void onSensorChanged(SensorEvent event) {
 
-        if (LOG_ERROR) Log.i(LOG_TAG, "In onSensorChanged");
+        if (LOG_INFO) Log.i(LOG_TAG, "In onSensorChanged");
         if (mIsSensorUpdateEnabled) {
 
             float deltaZ = event.values[2];
 
-            if (LOG_ERROR) Log.i(LOG_TAG, "Sensors fired....Z =" + deltaZ);
+            if (LOG_INFO) Log.i(LOG_TAG, "Sensors fired....Z =" + deltaZ);
 
             AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
             if (LOG_INFO)
-                Log.e(LOG_TAG, "Audio Manager ringerMode....  = " + getRingerMode(am.getRingerMode()));
+                Log.i(LOG_TAG, "Audio Manager ringerMode....  = " + getRingerMode(am.getRingerMode()));
 
-            TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-            if (LOG_ERROR) Log.e(LOG_TAG, "Telephony Manager = " + tm.getCallState());
+
+            if (LOG_INFO) Log.i(LOG_TAG, "Telephony Manager = " + telephonyManager.getCallState());
 
 
             //When a call is incoming
-            if (tm.getCallState() == TelephonyManager.CALL_STATE_RINGING) {
+            if (telephonyManager.getCallState() == TelephonyManager.CALL_STATE_RINGING) {
                 if (LOG_INFO)
                     Log.i(LOG_TAG, "Phone is Ringing, and is it face down = " + isPhoneFaceDown(deltaZ));
 
@@ -126,6 +134,29 @@ public class IncomingCallService extends Service implements SensorEventListener 
                     if (am.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
 
                         am.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
+                        int selectedSMSindex = sharedPref.getInt(getString(R.string.quick_SMS_index), 0);
+
+                        //If there is a quick SMS selected
+                        if (selectedSMSindex > 0) {
+                            if (!isSMSsent) {
+                                if (LOG_INFO) Log.i(LOG_TAG, "SMS is sent  = " + isSMSsent);
+
+                                String incomingPhoneNo = phoneStateListener.getIncomingPhoneNumber();
+
+                                if (!incomingPhoneNo.trim().isEmpty()) {
+                                    Log.e(LOG_TAG, "Incoming Number is found  = " + incomingPhoneNo);
+
+                                    sendQuickSMS(incomingPhoneNo, selectedSMSindex);
+                                    isSMSsent = true;
+                                } else {
+                                    if (LOG_INFO) Log.i(LOG_TAG, "No Incoming Number found!!");
+
+                                }
+                            } else {
+                                if (LOG_INFO) Log.i(LOG_TAG, "SMS is already sent  = " + isSMSsent);
+
+                            }
+                        }
                     }
                     //else check if phone is facing up, and  in Vibrate mode, the put it back to Ringer mode
                 } else {
@@ -136,8 +167,9 @@ public class IncomingCallService extends Service implements SensorEventListener 
                 }
 
                 //else if phone stopped ringing, and thus went into idle state
-            } else if (tm.getCallState() == TelephonyManager.CALL_STATE_IDLE) {
+            } else if (telephonyManager.getCallState() == TelephonyManager.CALL_STATE_IDLE) {
 
+                isSMSsent = false;
                 //If Phone was in Vibrate mode, then put it back to Ringer mode
                 if (am.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE) {
                     am.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
@@ -148,6 +180,14 @@ public class IncomingCallService extends Service implements SensorEventListener 
             if (LOG_INFO) Log.i(LOG_TAG, "Sensors Just STOPPED firing....");
             sensorManager.unregisterListener(this);
         }
+
+    }
+
+    private void sendQuickSMS(String incomingPhoneNo, int selectedSMSindex) {
+
+        if (LOG_INFO) Log.i(LOG_TAG, "sendQuickSMS selectedMessage is = " + quickSMSarray[selectedSMSindex]);
+        SmsManager smsManager = SmsManager.getDefault();
+        smsManager.sendTextMessage(incomingPhoneNo, null, quickSMSarray[selectedSMSindex], null, null);
 
     }
 
@@ -229,4 +269,6 @@ public class IncomingCallService extends Service implements SensorEventListener 
         boolean useWhiteIcon = (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP);
         return useWhiteIcon ? R.drawable.check_box_black_24dp : R.drawable.trayicon;
     }
+
+
 }
