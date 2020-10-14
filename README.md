@@ -1,18 +1,27 @@
-# flip-sush
-Repository of my debut, tiny, cute android app (:
-
+**<H1>flip-sush</H1>** <BR>
+[App Icon](readmeimages/sush.png)
+Repository of my debut, tiny, cute android app :] <BR> <BR>
+**Update as of October 2020**<BR><BR>
+ Development Version 2.0 of Sush is done, it includes:
+-  Upgrade to Android target SDK version 28, with minimum SDK version 21
+-  New feature of 'Quick response SMS' added
+-  'Share this app' and 'rate this app' feature added
+-  Updated UX, look and feel
+-----------------
 This App is a Native Android App developed in Android Studio.
-It basically does one thing:
-----When you switch it on, it senses for an incoming call,
-    if your phone is in ringing mode, and you want to put it on silent........
-    just flip it (face-down) and it'll go sush (silent). 
-    And flip it back (face-back) it'll again come back into ringing.
-    
-The essence is to allow user to put phone into silent during critical situations like meetings, prayer etc, 
-without  any phisical event.
+It basically does one thing:<BR>
+ When you switch it on, it senses for an incoming call,
+    if your phone is in ringing mode, and you want to put it on silent........<BR>
+    just flip it (face-down) and it'll go sush (silent). <BR>
+    And flip it back (face-back) it'll again come back into ringing.<BR>
 
+The essence is to allow user to put phone into silent during critical situations like meetings, prayer etc,
+without  any physical event.
 
-How to build, debug this app:
+And now with Version 2.0 of Sush, you can even set a 'Quick response SMS', which will be sent to the caller upon sushing her/his call!
+
+------------------
+**How to build, debug this app:**
 
 I've used Android Studio to develop this app. So it is pretty much simple.
 Import the project in Android Studio, clean build it and run it on Emulator or any connected Android device
@@ -27,5 +36,5 @@ How to use this app:
 
 
 Thank you Nitin Prabhu for your code review and feedback.
-Sat 17th June 2017 : New update is coming soon...
-:)
+
+[Flip it..Sush it..](readmeimages/Sush-feature-graphic.png)
