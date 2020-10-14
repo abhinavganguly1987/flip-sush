@@ -1,5 +1,5 @@
 **<H1>flip-sush</H1>** <BR>
-[App Icon](readmeimages/sush.png)
+ <img src="/readmeimages/sush.png" width="200" height="200"/>
 Repository of my debut, tiny, cute android app :] <BR> <BR>
 **Update as of October 2020**<BR><BR>
  Development Version 2.0 of Sush is done, it includes:
@@ -37,4 +37,4 @@ How to use this app:
 
 Thank you Nitin Prabhu for your code review and feedback.
 
-[Flip it..Sush it..](readmeimages/Sush-feature-graphic.png)
+<img src="readmeimages/Sush-feature-graphic.png"/>
