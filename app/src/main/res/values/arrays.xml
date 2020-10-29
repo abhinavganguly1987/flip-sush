@@ -3,7 +3,7 @@
     <string-array name="quickSMSList">
         <item>"None"</item>
         <item>"Hi there, im busy at the moment, can i call you later?"</item>
-        <item>"Hello, i am driving, i'll call you later, Thank you"</item>
+        <item>"Hello, i am travelling, i'll call you later, Thank you"</item>
         <item>"In a meeting, i'll call you later"</item>
         <item>"Hey honey, can i call you later?"</item>
     </string-array>
