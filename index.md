@@ -1,7 +1,7 @@
 # Sush - a tiny android app to enable 'flip to vibrate' 
 ===============================================================
 
-<img src="{{site.url}}{{site.baseurl}}/readmeimages/sush.png" width="140" height="140"/>
+<img src="{{site.url}}{{site.baseurl}}/readmeimages/sush.png" width="200" height="200"/>
 
 # A BIG Thank you for downloading and using my app.🙇🏻‍♂️
 
@@ -40,4 +40,4 @@ Of course, to do its intended work, Sush seeks certain permissions before you us
 
 Have any Feedback or suggestions? Feel free to drop it at [Sush on google play](https://play.google.com/store/apps/details?id=com.toto.sush "Sush Google play link") or drop me an email <abhinav.ganguly1987@gmail.com>
 
-![Image]({{site.url}}{{site.baseurl}}/readmeimages/Sush-feature-graphic.png)
+<img src="{{site.url}}{{site.baseurl}}/readmeimages/Sush-feature-graphic.png"/>
