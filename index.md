@@ -28,7 +28,7 @@ Of course, to do its intended work, Sush seeks certain permissions before you us
 - 'Share this app' and 'rate this app' feature added
 - Updated UX, look and feel
 
-<img src="https://github.com/abhinavganguly1987/flip-sush/blob/master/readmeimages/Sush_V2_1.png" width="140" height="240" alt="New UX and color scheme"/> <img src="https://github.com/abhinavganguly1987/flip-sush/blob/master/readmeimages/Sush_V2_2.png" width="140" height="240" alt="Quick response SMS feature in App drawer on left"/>
+<img src="{{site.url}}{{site.baseurl}}/readmeimages/Sush_V2_1.png" width="140" height="240" alt="New UX and color scheme"/> <img src="https://github.com/abhinavganguly1987/flip-sush/blob/master/readmeimages/Sush_V2_2.png" width="140" height="240" alt="Quick response SMS feature in App drawer on left"/>
 
 <img src="https://github.com/abhinavganguly1987/flip-sush/blob/master/readmeimages/Sush_V2_3.png" width="140" height="240" alt="Quick response SMS feature needs permission to access call logs to send SMS to incoming calling number"/> <img src="https://github.com/abhinavganguly1987/flip-sush/blob/master/readmeimages/Sush_V2_4.png" width="140" height="240" alt="Quick response SMS feature needs permission to send SMS"/>
 
