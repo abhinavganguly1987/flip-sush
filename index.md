@@ -2,6 +2,8 @@
 ===============================================================
 
 <img src="https://github.com/abhinavganguly1987/flip-sush/blob/master/readmeimages/sush.png" width="140" height="140"/>
+<img src="./readmeimages/sush.png" width="140" height="140"/>
+
 
 # A BIG Thank you for downloading and using my app.🙇🏻‍♂️
 
