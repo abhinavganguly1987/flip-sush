@@ -1,37 +1,43 @@
-## Welcome to GitHub Pages
+# Sush - a tiny android app to enable 'flip to vibrate' 
+===============================================================
 
-You can use the [editor on GitHub](https://github.com/abhinavganguly1987/flip-sush/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+<img src="https://github.com/abhinavganguly1987/flip-sush/blob/master/readmeimages/sush.png" width="140" height="140"/>
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+# A BIG Thank you for downloading and using my app.🙇🏻‍♂️
 
-### Markdown
+Sush basically does one thing:
+When you **switch it on**, it senses for an incoming call, if your phone is in ringing mode, and you want to put it on vibrate........
+just flip it (face-down) and it'll go sush (vibrate).
+And flip it back (face-back) it'll again come back into ringing.
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+The essence is to allow user to put phone into silent during critical situations like meetings, prayer etc, without any physical event.
 
-```markdown
-Syntax highlighted code block
+And now with Version 2.0 of Sush, you can even set a _**'Quick response SMS'**_, which will be sent to the caller upon sushing her/his call!
 
-# Header 1
-## Header 2
-### Header 3
+### Permissions used by Sush
+Of course, to do its intended work, Sush seeks certain permissions before you use it, the most important ones are :
+- **Read phone state** This is to sense if phone is ringing, which essentially helps the app to change to and fro vibrate upon a flip
+- **Access Call nogs** This is needed to support latest feature of _**'Quick response SMS'**_ to know the phone number of incoming call
+- **Send SMS** This is to support the latest feature of _**'Quick response SMS'**_ to respond with configure SMS message
 
-- Bulleted
-- List
+**Whats New with Version 2.0 of Sush** 
+- Upgrade to Android target SDK version 28, with minimum SDK version 21
+- New feature of 'Quick response SMS' added
+- 'Share this app' and 'rate this app' feature added
+- Updated UX, look and feel
 
-1. Numbered
-2. List
+<img src="https://github.com/abhinavganguly1987/flip-sush/blob/master/readmeimages/Sush_V2_1.png" width="140" height="240" alt="New UX and color scheme"/> <img src="https://github.com/abhinavganguly1987/flip-sush/blob/master/readmeimages/Sush_V2_2.png" width="140" height="240" alt="Quick response SMS feature in App drawer on left"/>
 
-**Bold** and _Italic_ and `Code` text
+<img src="https://github.com/abhinavganguly1987/flip-sush/blob/master/readmeimages/Sush_V2_3.png" width="140" height="240" alt="Quick response SMS feature needs permission to access call logs to send SMS to incoming calling number"/> <img src="https://github.com/abhinavganguly1987/flip-sush/blob/master/readmeimages/Sush_V2_4.png" width="140" height="240" alt="Quick response SMS feature needs permission to send SMS"/>
 
-[Link](url) and ![Image](src)
-```
+<img src="https://github.com/abhinavganguly1987/flip-sush/blob/master/readmeimages/Sush_V2_5.png" width="140" height="240" alt="select a Quick response SMS"/> <img src="https://github.com/abhinavganguly1987/flip-sush/blob/master/readmeimages/Sush_V2_6.png" width="140" height="240" alt="Share this app, if you found it useful"/>
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
 
-### Jekyll Themes
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/abhinavganguly1987/flip-sush/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
 
-### Support or Contact
 
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+### Feedback or Suggestions
+
+Have any Feedback or suggestions? Feel free to drop it at [Sush on google play](https://play.google.com/store/apps/details?id=com.toto.sush "Sush Google play link") or drop me an email <abhinav.ganguly1987@gmail.com>
+
+![Image](https://github.com/abhinavganguly1987/flip-sush/blob/master/readmeimages/Sush-feature-graphic.png)
