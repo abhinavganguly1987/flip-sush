@@ -1,9 +1,7 @@
 # Sush - a tiny android app to enable 'flip to vibrate' 
 ===============================================================
 
-<img src="https://github.com/abhinavganguly1987/flip-sush/blob/master/readmeimages/sush.png" width="140" height="140"/>
-![Image]({{site.url}}{{site.baseurl}}/readmeimages/Sush_V2_1.png)
-
+<img src="{{site.url}}{{site.baseurl}}/readmeimages/sush.png" width="140" height="140"/>
 
 # A BIG Thank you for downloading and using my app.🙇🏻‍♂️
 
@@ -28,11 +26,11 @@ Of course, to do its intended work, Sush seeks certain permissions before you us
 - 'Share this app' and 'rate this app' feature added
 - Updated UX, look and feel
 
-<img src="{{site.url}}{{site.baseurl}}/readmeimages/Sush_V2_1.png" width="140" height="240" alt="New UX and color scheme"/> <img src="https://github.com/abhinavganguly1987/flip-sush/blob/master/readmeimages/Sush_V2_2.png" width="140" height="240" alt="Quick response SMS feature in App drawer on left"/>
+<img src="{{site.url}}{{site.baseurl}}/readmeimages/Sush_V2_1.png" width="140" height="240" alt="New UX and color scheme"/> <img src="{{site.url}}{{site.baseurl}}/readmeimages/Sush_V2_2.png" width="140" height="240" alt="Quick response SMS feature in App drawer on left"/>
 
-<img src="https://github.com/abhinavganguly1987/flip-sush/blob/master/readmeimages/Sush_V2_3.png" width="140" height="240" alt="Quick response SMS feature needs permission to access call logs to send SMS to incoming calling number"/> <img src="https://github.com/abhinavganguly1987/flip-sush/blob/master/readmeimages/Sush_V2_4.png" width="140" height="240" alt="Quick response SMS feature needs permission to send SMS"/>
+<img src="{{site.url}}{{site.baseurl}}/readmeimages/Sush_V2_3.png" width="140" height="240" alt="Quick response SMS feature needs permission to access call logs to send SMS to incoming calling number"/> <img src="{{site.url}}{{site.baseurl}}/readmeimages/Sush_V2_4.png" width="140" height="240" alt="Quick response SMS feature needs permission to send SMS"/>
 
-<img src="https://github.com/abhinavganguly1987/flip-sush/blob/master/readmeimages/Sush_V2_5.png" width="140" height="240" alt="select a Quick response SMS"/> <img src="https://github.com/abhinavganguly1987/flip-sush/blob/master/readmeimages/Sush_V2_6.png" width="140" height="240" alt="Share this app, if you found it useful"/>
+<img src="{{site.url}}{{site.baseurl}}/readmeimages/Sush_V2_5.png" width="140" height="240" alt="select a Quick response SMS"/> <img src="{{site.url}}{{site.baseurl}}/readmeimages/Sush_V2_6.png" width="140" height="240" alt="Share this app, if you found it useful"/>
 
 
 
@@ -42,4 +40,4 @@ Of course, to do its intended work, Sush seeks certain permissions before you us
 
 Have any Feedback or suggestions? Feel free to drop it at [Sush on google play](https://play.google.com/store/apps/details?id=com.toto.sush "Sush Google play link") or drop me an email <abhinav.ganguly1987@gmail.com>
 
-![Image](https://github.com/abhinavganguly1987/flip-sush/blob/master/readmeimages/Sush-feature-graphic.png)
+![Image]({{site.url}}{{site.baseurl}}/readmeimages/Sush-feature-graphic.png)
